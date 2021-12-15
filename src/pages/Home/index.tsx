@@ -7,6 +7,7 @@ const Home: React.FC = () => {
   const [pokemon, setPokemon] = useState<any>();
   const [pokemonId, setPokemonId] = useState<number>();
   const [loading, setLoading] = useState<boolean>(true);
+  const [error, setError] = useState<boolean>(false);
 
   const getRandomPokemonId = () => {
     const randomPokemonId = Math.floor(Math.random() * 898) + 1;
@@ -28,14 +29,21 @@ const Home: React.FC = () => {
         .then(({ data }) => {
           setPokemon(data);
         })
+        .catch((e) => {
+          setError(true);
+        })
         .finally(() => {
           setLoading(false);
         });
     }
   }, [pokemonId]);
 
-  if (!pokemonId || !pokemon || loading) {
+  if (loading) {
     return <div>Loading...</div>;
+  }
+
+  if (error) {
+    return <p>Error</p>;
   }
 
   return (

@@ -18,6 +18,7 @@ const Pokemon: React.FC = () => {
 
   const [pokemon, setPokemon] = useState<any>();
   const [loading, setLoading] = useState<boolean>(true);
+  const [error, setError] = useState<boolean>(false);
 
   const getBackgroundType = (): any => {
     if (!pokemon) return "normal";
@@ -36,13 +37,20 @@ const Pokemon: React.FC = () => {
       .then(({ data }) => {
         setPokemon(data);
       })
+      .catch((e) => {
+        setError(true);
+      })
       .finally(() => {
         setLoading(false);
       });
-  }, []);
+  }, [pokemonId]);
 
   if (!pokemon || loading) {
     return <div>Loading...</div>;
+  }
+
+  if (error) {
+    return <p>Error: {error}</p>;
   }
 
   return (
